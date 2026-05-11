@@ -190,39 +190,15 @@
 
     /* ── Vignette image dans popup ── */
     .popup-thumb {
-      margin-top: 10px;
       display: block;
-      width: 72px;
-      height: 90px;
-      object-fit: cover;
+      width: 80px;
+      height: auto;
       border: 2px solid #6b4c2a;
       border-radius: 2px;
-      cursor: zoom-in;
       float: right;
       margin-left: 10px;
+      margin-bottom: 4px;
       box-shadow: 2px 2px 6px rgba(0,0,0,0.35);
-      transition: transform 0.15s ease;
-    }
-    .popup-thumb:hover { transform: scale(1.05); }
-
-    /* ── Lightbox ── */
-    .lightbox {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.82);
-      z-index: 9999;
-      justify-content: center;
-      align-items: center;
-      cursor: zoom-out;
-    }
-    .lightbox.active { display: flex; animation: fadeIn 0.2s ease; }
-    .lightbox img {
-      max-width: 88vw;
-      max-height: 88vh;
-      border: 3px solid #6b4c2a;
-      box-shadow: 0 0 0 1px #3b2510, 0 12px 48px rgba(0,0,0,0.8);
-      border-radius: 3px;
     }
   </style>
 </head>
@@ -231,7 +207,7 @@
 <div class="map-wrapper" id="mapWrapper">
   <img src="carte.jpg" alt="Carte de Lame Blanche" id="mapImg" />
 
-  <!-- ══ HOTSPOT 4 : Grotte bleue ══ -->
+  <!-- ══ HOTSPOT 4 : Grotte des cultistes ══ -->
   <div class="hotspot hs-green" style="left: 11.24%; top: 51.41%;" data-popup="popup-grotte">
     <div class="hotspot-ring" style="border-color: rgba(255,255,255,0.9); width: 22px; height: 22px;">
       <div class="hotspot-dot" style="background:#ffffff; box-shadow: 0 0 0 2px #3b2510; width: 10px; height: 10px;"></div>
@@ -247,7 +223,7 @@
     </div>
     <hr class="popup-divider" />
     <div class="popup-body">
-      <img src="leportrait.png" alt="Portrait" class="popup-thumb" id="portrait-thumb" />
+      <img src="leportrait.png" alt="Portrait" class="popup-thumb" />
       Dixisse metuat tum quo si tum se gratiam Coluntur cum exsulantem simulatione fit si aut eum inopes infidos eum gratiam metuat putet se tamen aut enim cum forte simulatione tum metuat amicos dixisse Quod plerumque Quod infidos a posset gratiam neutris ut amicos iam enim intellegitur Quod quem ceciderunt amicorum intellegitur a habuisset tamen eum eum simulatione amicorum plerumque neutris aut quam Coluntur forte ferunt quos quo fidos tum iam quam gratiam quem amicos dixisse Quod diligat forte dixisse Tarquinium putet simulatione infidos tum quem Tarquinium tum habuisset habuisset eum iam eum forte tamen metui neutris aut posset tamen se.
     </div>
   </div>
@@ -306,7 +282,7 @@
   </div>
 
   <!-- ══ POPUP 1 ══ -->
-  <div class="popup" id="popup-refuge">
+  <div class="popup" id="popup-refuge" style="width: 420px;">
     <button class="popup-close" aria-label="Fermer">✕</button>
     <div class="popup-header">
       <div class="popup-dot" style="background:#4a9e6e;"></div>
@@ -322,11 +298,6 @@
   </div>
 
 </div><!-- /map-wrapper -->
-
-<!-- ══ LIGHTBOX ══ -->
-<div class="lightbox" id="lightbox">
-  <img src="leportrait.png" alt="Portrait" />
-</div>
 
 <script>
   const wrapper = document.getElementById('mapWrapper');
@@ -417,17 +388,6 @@
       const hotspot = wrapper.querySelector(`[data-popup="${id}"]`);
       if (hotspot) positionPopup(hotspot, popup);
     });
-  });
-
-  // Lightbox portrait
-  const lightbox = document.getElementById('lightbox');
-  document.getElementById('portrait-thumb').addEventListener('click', e => {
-    e.stopPropagation();
-    lightbox.classList.add('active');
-  });
-  lightbox.addEventListener('click', () => lightbox.classList.remove('active'));
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') lightbox.classList.remove('active');
   });
 </script>
 </body>
