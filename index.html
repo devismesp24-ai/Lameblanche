@@ -306,10 +306,6 @@
     }
     // Si ça dépasse en haut après correction, on plafonne
     if (wRect.top + top < 4) top = 4 - wRect.top;
-    // En dernier recours : max-height + scroll
-    const available = window.innerHeight - wRect.top - 16;
-    popup.style.maxHeight = available + 'px';
-    popup.style.overflowY = 'auto';
 
     left = hLeft - 28;
     if (left + popupW > wRect.width) left = wRect.width - popupW - 4;
