@@ -212,7 +212,7 @@
   </div>
 
   <!-- ══ POPUP 3 ══ -->
-  <div class="popup" id="popup-caverne" style="width: 360px;">
+  <div class="popup" id="popup-caverne" style="width: 400px;">
     <button class="popup-close" aria-label="Fermer">✕</button>
     <div class="popup-header">
       <div class="popup-dot" style="background:#b49b6e;"></div>
@@ -296,12 +296,20 @@
       popup.classList.add('arrow-top');
     }
 
-    // Empêche le débordement en bas (par rapport à la fenêtre)
-    const popupAbsTop = wRect.top + top;
-    if (popupAbsTop + popupH > window.innerHeight - 8) {
-      top = window.innerHeight - wRect.top - popupH - 8;
+    // Position absolue dans la fenêtre du popup
+    const absTop = wRect.top + top;
+    const absBot = absTop + popupH;
+
+    // Si ça dépasse en bas, on remonte
+    if (absBot > window.innerHeight - 8) {
+      top -= (absBot - window.innerHeight + 8);
     }
-    if (top < 0) top = 4;
+    // Si ça dépasse en haut après correction, on plafonne
+    if (wRect.top + top < 4) top = 4 - wRect.top;
+    // En dernier recours : max-height + scroll
+    const available = window.innerHeight - wRect.top - 16;
+    popup.style.maxHeight = available + 'px';
+    popup.style.overflowY = 'auto';
 
     left = hLeft - 28;
     if (left + popupW > wRect.width) left = wRect.width - popupW - 4;
