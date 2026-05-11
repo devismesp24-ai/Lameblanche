@@ -248,7 +248,7 @@
   </div>
 
   <!-- ══ POPUP 1 ══ -->
-  <div class="popup" id="popup-refuge">
+  <div class="popup" id="popup-refuge" style="width: 420px;">
     <button class="popup-close" aria-label="Fermer">✕</button>
     <div class="popup-header">
       <div class="popup-dot" style="background:#4a9e6e;"></div>
@@ -294,11 +294,12 @@
       left = hLeft - 28;
       popup.classList.add("arrow-top");
     } else if (spaceLeft >= popupW) {
-      top  = hTop + hRect.height / 2 - popupH + 24;
+      // Hotspot en zone droite/basse : popup à gauche, aligné en bas sur le hotspot
+      top  = hBot - popupH;
       left = hLeft - popupW - 16;
       popup.classList.add("arrow-left");
     } else {
-      top  = hTop + hRect.height / 2 - popupH + 24;
+      top  = hBot - popupH;
       left = hLeft + 16;
       popup.classList.add("arrow-right");
     }
