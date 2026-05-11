@@ -283,33 +283,30 @@
 
     let top, left;
 
-    const spaceAbove = hTop;
-    const spaceBelow = wRect.height - hBot;
+    // Espace disponible dans la fenêtre
+    const spaceAbove = hRect.top - 8;
+    const spaceBelow = window.innerHeight - hRect.bottom - 8;
 
-    if (spaceAbove >= popupH + 16 || spaceAbove >= spaceBelow) {
-      // Au-dessus du hotspot
+    // Vertical : préfère au-dessus si assez de place, sinon en dessous
+    if (spaceAbove >= popupH || spaceAbove >= spaceBelow) {
       top = hTop - popupH - 12;
       popup.classList.remove('arrow-top');
     } else {
-      // En-dessous
       top = hBot + 12;
       popup.classList.add('arrow-top');
     }
 
-    // Position absolue dans la fenêtre du popup
+    // Correction débordement vertical dans la fenêtre
     const absTop = wRect.top + top;
-    const absBot = absTop + popupH;
-
-    // Si ça dépasse en bas, on remonte
-    if (absBot > window.innerHeight - 8) {
-      top -= (absBot - window.innerHeight + 8);
+    if (absTop + popupH > window.innerHeight - 8) {
+      top -= (absTop + popupH - window.innerHeight + 8);
     }
-    // Si ça dépasse en haut après correction, on plafonne
-    if (wRect.top + top < 4) top = 4 - wRect.top;
+    if (wRect.top + top < 8) top = 8 - wRect.top;
 
+    // Horizontal : aligne sur le hotspot, puis corrige les débordements
     left = hLeft - 28;
-    if (left + popupW > wRect.width) left = wRect.width - popupW - 4;
-    if (left < 0) left = 4;
+    if (left + popupW > wRect.width - 4) left = wRect.width - popupW - 4;
+    if (left < 4) left = 4;
 
     popup.style.left = left + 'px';
     popup.style.top  = top  + 'px';
