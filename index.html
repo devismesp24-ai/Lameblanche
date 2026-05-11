@@ -169,7 +169,7 @@
       content: '';
       position: absolute;
       bottom: -10px;
-      left: 20px;
+      left: var(--arrow-left, 20px);
       width: 0; height: 0;
       border-left: 8px solid transparent;
       border-right: 8px solid transparent;
@@ -307,6 +307,11 @@
     left = hLeft - 28;
     if (left + popupW > wRect.width - 4) left = wRect.width - popupW - 4;
     if (left < 4) left = 4;
+
+    let arrowLeft = hLeft - left;
+    if (arrowLeft < 12) arrowLeft = 12;
+    if (arrowLeft > popupW - 12) arrowLeft = popupW - 12;
+    popup.style.setProperty('--arrow-left', arrowLeft + 'px');
 
     popup.style.left = left + 'px';
     popup.style.top  = top  + 'px';
