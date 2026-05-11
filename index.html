@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lame Blanche — Carte Interactive</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=IM+Fell+English:ital@0;1&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #1a1208;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 2rem;
+      font-family: 'IM Fell English', serif;
+    }
+
+    .map-wrapper {
+      position: relative;
+      display: inline-block;
+      max-width: 100%;
+    }
+
+    .map-wrapper img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      border: 3px solid #6b4c2a;
+      box-shadow: 0 0 0 1px #3b2510, 6px 6px 24px rgba(0,0,0,0.7);
+    }
+
+    /* ── Hotspot ── */
+    .hotspot {
+      position: absolute;
+      cursor: pointer;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+    }
+
+    .hotspot-ring {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2.5px solid rgba(255,255,255,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease;
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+
+    .hotspot:hover .hotspot-ring {
+      transform: scale(1.15);
+    }
+
+    .hotspot-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+    }
+
+    /* Couleurs par type */
+    .hs-green .hotspot-ring  { border-color: rgba(74,158,110,0.7); }
+    .hs-green .hotspot-dot   { background: #4a9e6e; box-shadow: 0 0 6px #4a9e6e; }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(74,158,110,0.5); }
+      50%       { box-shadow: 0 0 0 7px rgba(74,158,110,0); }
+    }
+
+    /* ── Popup ── */
+    .popup {
+      position: absolute;
+      z-index: 100;
+      width: 270px;
+      background: #f5f0e0;
+      border: 2px solid #6b4c2a;
+      border-radius: 3px;
+      padding: 1rem 1.1rem 0.9rem;
+      box-shadow: 4px 4px 0 #6b4c2a, 0 8px 32px rgba(0,0,0,0.5);
+      display: none;
+      pointer-events: none;
+    }
+
+    .popup.active {
+      display: block;
+      pointer-events: auto;
+      animation: fadeIn 0.18s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .popup-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 7px;
+    }
+
+    .popup-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .popup-title {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: #3b2510;
+      letter-spacing: 0.04em;
+      line-height: 1.2;
+    }
+
+    .popup-divider {
+      border: none;
+      border-top: 1px solid #c4a97a;
+      margin-bottom: 8px;
+    }
+
+    .popup-body {
+      font-size: 12.5px;
+      color: #4a3220;
+      line-height: 1.65;
+      font-style: italic;
+    }
+
+    .popup-tag {
+      margin-top: 9px;
+      font-size: 10.5px;
+      color: #8a6a45;
+      text-align: right;
+      font-style: normal;
+      letter-spacing: 0.06em;
+    }
+
+    .popup-close {
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      color: #8a6a45;
+      line-height: 1;
+      pointer-events: auto;
+    }
+    .popup-close:hover { color: #3b2510; }
+
+    /* ── Petite flèche en bas du popup ── */
+    .popup::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 20px;
+      width: 0; height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 10px solid #6b4c2a;
+    }
+    /* flèche quand le popup est au-dessus → flèche en bas (défaut) */
+    /* flèche quand le popup est en-dessous → flèche en haut */
+    .popup.arrow-top::after {
+      bottom: auto;
+      top: -10px;
+      border-top: none;
+      border-bottom: 10px solid #6b4c2a;
+    }
+  </style>
+</head>
+<body>
+
+<div class="map-wrapper" id="mapWrapper">
+  <img src="Lameblanche__1_.jpg" alt="Carte de Lame Blanche" id="mapImg" />
+
+  <!-- ══ HOTSPOT 1 : Refuge abandonné (rond vert) ══ -->
+  <!-- Position en % sur l'image originale (ajustez si besoin) -->
+  <div class="hotspot hs-green" style="left: 79.5%; top: 67%;" data-popup="popup-refuge">
+    <div class="hotspot-ring">
+      <div class="hotspot-dot"></div>
+    </div>
+  </div>
+
+  <!-- ══ POPUP 1 ══ -->
+  <div class="popup" id="popup-refuge">
+    <button class="popup-close" aria-label="Fermer">✕</button>
+    <div class="popup-header">
+      <div class="popup-dot" style="background:#4a9e6e;"></div>
+      <div class="popup-title">Refuge abandonné</div>
+    </div>
+    <hr class="popup-divider" />
+    <div class="popup-body">
+      Un ancien poste de garde taillé à même la roche, oublié depuis des décennies. Les murs suintent l'humidité, mais le toit tient encore bon. On y trouve quelques couvertures moisies, un vieux foyer noirci et les restes d'une réserve de vivres depuis longtemps pillée. Le silence n'y est troublé que par le vent s'engouffrant par une fissure dans la paroi ouest.
+    </div>
+    <div class="popup-tag">✦ Endroit sûr</div>
+  </div>
+
+</div><!-- /map-wrapper -->
+
+<script>
+  const wrapper = document.getElementById('mapWrapper');
+  const img     = document.getElementById('mapImg');
+
+  function positionPopup(hotspot, popup) {
+    const wRect = wrapper.getBoundingClientRect();
+    const hRect = hotspot.getBoundingClientRect();
+
+    const hLeft   = hRect.left - wRect.left + hRect.width / 2;
+    const hTop    = hRect.top  - wRect.top;
+    const popupH  = 200; // hauteur estimée du popup
+    const popupW  = 270;
+
+    let top, left;
+
+    if (hTop - popupH - 16 > 0) {
+      // Au-dessus du hotspot
+      top  = hTop - popupH - 12;
+      popup.classList.remove('arrow-top');
+    } else {
+      // En-dessous
+      top  = hRect.bottom - wRect.top + 12;
+      popup.classList.add('arrow-top');
+    }
+
+    left = hLeft - 28;
+    if (left + popupW > wRect.width) left = wRect.width - popupW - 4;
+    if (left < 0) left = 4;
+
+    popup.style.left = left + 'px';
+    popup.style.top  = top  + 'px';
+  }
+
+  // Clic sur un hotspot → ouvre/ferme le popup
+  wrapper.querySelectorAll('.hotspot').forEach(hotspot => {
+    hotspot.addEventListener('click', e => {
+      e.stopPropagation();
+      const targetId = hotspot.dataset.popup;
+      const popup    = document.getElementById(targetId);
+
+      const wasActive = popup.classList.contains('active');
+
+      // Ferme tous les popups
+      wrapper.querySelectorAll('.popup').forEach(p => p.classList.remove('active'));
+
+      if (!wasActive) {
+        popup.classList.add('active');
+        positionPopup(hotspot, popup);
+      }
+    });
+  });
+
+  // Bouton fermer dans le popup
+  wrapper.querySelectorAll('.popup-close').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      btn.closest('.popup').classList.remove('active');
+    });
+  });
+
+  // Clic ailleurs → ferme tout
+  document.addEventListener('click', () => {
+    wrapper.querySelectorAll('.popup').forEach(p => p.classList.remove('active'));
+  });
+
+  // Repositionne si fenêtre redimensionnée
+  window.addEventListener('resize', () => {
+    wrapper.querySelectorAll('.popup.active').forEach(popup => {
+      const id      = popup.id;
+      const hotspot = wrapper.querySelector(`[data-popup="${id}"]`);
+      if (hotspot) positionPopup(hotspot, popup);
+    });
+  });
+</script>
+</body>
+</html>
