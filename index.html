@@ -242,25 +242,42 @@
   const img     = document.getElementById('mapImg');
 
   function positionPopup(hotspot, popup) {
-    const wRect = wrapper.getBoundingClientRect();
-    const hRect = hotspot.getBoundingClientRect();
+    const wRect  = wrapper.getBoundingClientRect();
+    const hRect  = hotspot.getBoundingClientRect();
 
-    const hLeft   = hRect.left - wRect.left + hRect.width / 2;
-    const hTop    = hRect.top  - wRect.top;
-    const popupH  = 200; // hauteur estimée du popup
-    const popupW  = 270;
+    const hLeft  = hRect.left - wRect.left + hRect.width / 2;
+    const hTop   = hRect.top  - wRect.top;
+    const hBot   = hRect.bottom - wRect.top;
+
+    // Mesure la hauteur réelle du popup
+    popup.style.visibility = 'hidden';
+    popup.style.display    = 'block';
+    const popupH = popup.offsetHeight;
+    const popupW = popup.offsetWidth;
+    popup.style.visibility = '';
+    popup.style.display    = '';
 
     let top, left;
 
-    if (hTop - popupH - 16 > 0) {
+    const spaceAbove = hTop;
+    const spaceBelow = wRect.height - hBot;
+
+    if (spaceAbove >= popupH + 16 || spaceAbove >= spaceBelow) {
       // Au-dessus du hotspot
-      top  = hTop - popupH - 12;
+      top = hTop - popupH - 12;
       popup.classList.remove('arrow-top');
     } else {
       // En-dessous
-      top  = hRect.bottom - wRect.top + 12;
+      top = hBot + 12;
       popup.classList.add('arrow-top');
     }
+
+    // Empêche le débordement en bas (par rapport à la fenêtre)
+    const popupAbsTop = wRect.top + top;
+    if (popupAbsTop + popupH > window.innerHeight - 8) {
+      top = window.innerHeight - wRect.top - popupH - 8;
+    }
+    if (top < 0) top = 4;
 
     left = hLeft - 28;
     if (left + popupW > wRect.width) left = wRect.width - popupW - 4;
