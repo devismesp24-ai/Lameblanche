@@ -184,17 +184,8 @@
 <div class="map-wrapper" id="mapWrapper">
   <img src="carte.jpg" alt="Carte de Lame Blanche" id="mapImg" />
 
-  <!-- Outil de calibration -->
-  <div id="calibration" style="
-    position: absolute; top: 8px; left: 8px;
-    background: rgba(0,0,0,0.75); color: #fff;
-    font-family: monospace; font-size: 13px;
-    padding: 6px 10px; border-radius: 4px;
-    pointer-events: none; z-index: 200;
-  ">Cliquez sur la carte pour obtenir les coordonnées</div>
-
   <!-- ══ HOTSPOT 1 : Refuge abandonné (rond vert) ══ -->
-  <div class="hotspot hs-green" style="left: 77%; top: 69%;" data-popup="popup-refuge">
+  <div class="hotspot hs-green" style="left: 77.4%; top: 67.8%;" data-popup="popup-refuge">
     <div class="hotspot-ring" style="border-color: rgba(255,255,255,0.9);">
       <div class="hotspot-dot" style="background:#ffffff; box-shadow: 0 0 0 2px #3b2510;"></div>
     </div>
@@ -219,14 +210,6 @@
 </div><!-- /map-wrapper -->
 
 <script>
-  // Outil de calibration : clic sur la carte affiche les % exacts
-  img.addEventListener('click', e => {
-    const rect = img.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width  * 100).toFixed(1);
-    const y = ((e.clientY - rect.top)  / rect.height * 100).toFixed(1);
-    document.getElementById('calibration').textContent = `left: ${x}%  |  top: ${y}%`;
-  });
-
   const wrapper = document.getElementById('mapWrapper');
   const img     = document.getElementById('mapImg');
 
