@@ -65,12 +65,12 @@
     }
 
     /* Couleurs par type */
-    .hs-green .hotspot-ring  { border-color: rgba(74,158,110,0.7); }
-    .hs-green .hotspot-dot   { background: #4a9e6e; box-shadow: 0 0 6px #4a9e6e; }
+    .hs-green .hotspot-ring  { border-color: rgba(255,255,255,0.9); }
+    .hs-green .hotspot-dot   { background: #ffffff; box-shadow: 0 0 0 2px #3b2510; }
 
     @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(74,158,110,0.5); }
-      50%       { box-shadow: 0 0 0 7px rgba(74,158,110,0); }
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.6); }
+      50%       { box-shadow: 0 0 0 7px rgba(255,255,255,0); }
     }
 
     /* ── Popup ── */
@@ -184,9 +184,9 @@
   <img src="carte.jpg" alt="Carte de Lame Blanche" id="mapImg" />
 
   <!-- ══ HOTSPOT 1 : Refuge abandonné (rond vert) ══ -->
-  <div class="hotspot hs-green" style="left: 75.5%; top: 72%;" data-popup="popup-refuge">
-    <div class="hotspot-ring">
-      <div class="hotspot-dot"></div>
+  <div class="hotspot hs-green" style="left: 78%; top: 67%;" data-popup="popup-refuge">
+    <div class="hotspot-ring" style="border-color: rgba(255,255,255,0.9);">
+      <div class="hotspot-dot" style="background:#ffffff; box-shadow: 0 0 0 2px #3b2510;"></div>
     </div>
   </div>
 
