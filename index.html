@@ -217,18 +217,126 @@
     .lightbox.active {
       display: flex;
     }
-    .lightbox img {
-      max-width: 90vw;
+
+    /* Conteneur flip 3D */
+    .lightbox-card {
+      position: relative;
+      width: min(420px, 90vw);
       max-height: 90vh;
-      width: auto;
-      height: auto;
+      perspective: 1600px;
+      cursor: default;
+    }
+    .lightbox-inner {
+      position: relative;
+      width: 100%;
+      transition: transform 0.7s cubic-bezier(0.4, 0.0, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+    .lightbox-card.flipped .lightbox-inner {
+      transform: rotateY(180deg);
+    }
+
+    .lightbox-face {
+      width: 100%;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
       background: #f5f0e0;
-      padding: 1.2rem;
       border: 3px solid #6b4c2a;
       border-radius: 3px;
       box-shadow: 0 0 0 1px #3b2510, 0 20px 60px rgba(0, 0, 0, 0.8);
-      cursor: default;
     }
+
+    /* Face avant : portrait */
+    .lightbox-front {
+      padding: 1.2rem;
+      text-align: center;
+    }
+    .lightbox-front img {
+      max-width: 100%;
+      max-height: calc(90vh - 4rem);
+      width: auto;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* Face arrière : texte */
+    .lightbox-back {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: rotateY(180deg);
+      padding: 1.6rem 1.4rem 1.2rem;
+      max-height: 90vh;
+      overflow-y: auto;
+      font-family: 'Georgia', serif;
+      font-size: 13px;
+      color: #3b2510;
+      line-height: 1.65;
+      text-align: left;
+    }
+    .lightbox-back h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #3b2510;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    .lightbox-back hr {
+      border: none;
+      border-top: 1px solid #c4a97a;
+      margin-bottom: 12px;
+    }
+    .lightbox-back p {
+      margin-bottom: 10px;
+    }
+    .lightbox-back p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Scrollbar discrète sur le verso */
+    .lightbox-back::-webkit-scrollbar {
+      width: 8px;
+    }
+    .lightbox-back::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .lightbox-back::-webkit-scrollbar-thumb {
+      background: #c4a97a;
+      border-radius: 4px;
+    }
+
+    /* Bouton flip */
+    .lightbox-flip {
+      position: absolute;
+      bottom: -3.2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #f5f0e0;
+      border: 2px solid #6b4c2a;
+      border-radius: 3px;
+      padding: 0.5rem 1.1rem;
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #3b2510;
+      cursor: pointer;
+      box-shadow: 2px 2px 0 #6b4c2a, 0 4px 16px rgba(0, 0, 0, 0.5);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      text-transform: uppercase;
+    }
+    .lightbox-flip:hover {
+      transform: translateX(-50%) translateY(-1px);
+      box-shadow: 2px 3px 0 #6b4c2a, 0 6px 20px rgba(0, 0, 0, 0.6);
+    }
+    .lightbox-flip:active {
+      transform: translateX(-50%) translateY(1px);
+      box-shadow: 2px 1px 0 #6b4c2a, 0 2px 8px rgba(0, 0, 0, 0.5);
+    }
+
     .lightbox-close {
       position: absolute;
       top: 1.2rem;
@@ -241,6 +349,7 @@
       line-height: 1;
       font-family: 'Cinzel', serif;
       transition: color 0.15s ease;
+      z-index: 10;
     }
     .lightbox-close:hover {
       color: #c4a97a;
@@ -349,7 +458,22 @@
 <!-- ══ LIGHTBOX ══ -->
 <div class="lightbox" id="lightbox">
   <button class="lightbox-close" aria-label="Fermer">✕</button>
-  <img src="" alt="" id="lightboxImg" />
+  <div class="lightbox-card" id="lightboxCard">
+    <div class="lightbox-inner">
+      <div class="lightbox-face lightbox-front">
+        <img src="" alt="" id="lightboxImg" />
+      </div>
+      <div class="lightbox-face lightbox-back">
+        <h3>Aurore Sandrenon</h3>
+        <hr />
+        <p>Le portrait figure Aurore Sandrenon, héritière de la maison éponyme. Le médaillon, quant à lui, arbore quelques caractères de l'alphabet drust. Observation de l'inquisiteur Blancmistral.</p>
+        <p>Enracinée dans la petite noblesse drustvari, la maison Sandrenon se rattache historiquement aux Hauts de Corlain et connaît aujourd'hui un long déclin. Les causes exactes de cette régression demeurent difficiles à établir : la Troisième Guerre ? La Quatrième ? Le sabbat Malecarde ? De mauvaises allégeances contractées jadis ? Une disgrâce ? Plusieurs facteurs s'y entremêlent, selon toute vraisemblance.</p>
+        <p>À l'apogée de leur puissance, les Sandrenon étendaient leur influence locale par des membres introduits à la cour Malvoie, au sein de la magistrature urbaine, et jusqu'aux fonctions de trésorier et d'échevin. Ils auraient par le passé réduit à néant la maison Ostesylve, dont aucun vestige ne subsiste, trente-deux ans avant l'ouverture de la Porte des Ténèbres. Sœur Everlange, du clergé de la Sainte Lumière, a fait observer qu'une certaine « sœur Ostesylve », sorcière du sabbat Malecarde, tomba abattue au cimetière Tertrebois il y a quelques années.</p>
+        <p>Enfin, une rumeur sans fondement prête à une certaine Eliana Sandrenon une liaison avec un membre de la maison Malvoie.</p>
+      </div>
+    </div>
+    <button class="lightbox-flip" id="lightboxFlip">Retourner ⤺</button>
+  </div>
 </div>
 
 <script>
@@ -412,18 +536,41 @@
   }
 
   // ── Lightbox ──
-  const lightbox    = document.getElementById('lightbox');
-  const lightboxImg = document.getElementById('lightboxImg');
+  const lightbox     = document.getElementById('lightbox');
+  const lightboxImg  = document.getElementById('lightboxImg');
+  const lightboxCard = document.getElementById('lightboxCard');
+  const lightboxFlip = document.getElementById('lightboxFlip');
 
   function openLightbox(src, alt) {
     lightboxImg.src = src;
     lightboxImg.alt = alt || '';
+    lightboxCard.classList.remove('flipped'); // toujours rouvrir sur le portrait
+    lightboxFlip.textContent = 'Retourner ⤺';
     lightbox.classList.add('active');
   }
   function closeLightbox() {
     lightbox.classList.remove('active');
-    lightboxImg.src = '';
+    // Petit délai pour ne pas voir le retour à la face avant pendant la fermeture
+    setTimeout(() => {
+      lightboxCard.classList.remove('flipped');
+      lightboxFlip.textContent = 'Retourner ⤺';
+      lightboxImg.src = '';
+    }, 200);
   }
+
+  // Bouton de flip
+  lightboxFlip.addEventListener('click', e => {
+    e.stopPropagation();
+    lightboxCard.classList.toggle('flipped');
+    lightboxFlip.textContent = lightboxCard.classList.contains('flipped')
+      ? 'Retourner ⤻'
+      : 'Retourner ⤺';
+  });
+
+  // Empêcher la fermeture quand on clique dans la carte (image, texte, bouton)
+  lightboxCard.addEventListener('click', e => {
+    e.stopPropagation();
+  });
 
   // Clic sur un portrait dans un popup → ouvre la lightbox
   wrapper.querySelectorAll('.popup-portrait').forEach(img => {
