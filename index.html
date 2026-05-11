@@ -354,6 +354,32 @@
     .lightbox-close:hover {
       color: #c4a97a;
     }
+
+    /* Bouton retour (revient au popup) */
+    .lightbox-back-btn {
+      position: absolute;
+      top: 1.4rem;
+      left: 1.6rem;
+      background: none;
+      border: none;
+      color: #f5f0e0;
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0.5rem 0.9rem;
+      border: 1.5px solid rgba(245, 240, 224, 0.5);
+      border-radius: 3px;
+      transition: all 0.15s ease;
+      z-index: 10;
+    }
+    .lightbox-back-btn:hover {
+      color: #c4a97a;
+      border-color: #c4a97a;
+    }
   </style>
 </head>
 <body>
@@ -457,6 +483,7 @@
 
 <!-- ══ LIGHTBOX ══ -->
 <div class="lightbox" id="lightbox">
+  <button class="lightbox-back-btn" id="lightboxBackBtn" aria-label="Retour">⟵ Retour</button>
   <button class="lightbox-close" aria-label="Fermer">✕</button>
   <div class="lightbox-card" id="lightboxCard">
     <div class="lightbox-inner">
@@ -468,8 +495,9 @@
         <hr />
         <p>Le portrait figure Aurore Sandrenon, héritière de la maison éponyme. Le médaillon, quant à lui, arbore quelques caractères de l'alphabet drust. Observation de l'inquisiteur Blancmistral.</p>
         <p>Enracinée dans la petite noblesse drustvari, la maison Sandrenon se rattache historiquement aux Hauts de Corlain et connaît aujourd'hui un long déclin. Les causes exactes de cette régression demeurent difficiles à établir : la Troisième Guerre ? La Quatrième ? Le sabbat Malecarde ? De mauvaises allégeances contractées jadis ? Une disgrâce ? Plusieurs facteurs s'y entremêlent, selon toute vraisemblance.</p>
-        <p>À l'apogée de leur puissance, les Sandrenon étendaient leur influence locale par des membres introduits à la cour Malvoie, au sein de la magistrature urbaine, et jusqu'aux fonctions de trésorier et d'échevin. Ils auraient par le passé réduit à néant la maison Ostesylve, dont aucun vestige ne subsiste, trente-deux ans avant l'ouverture de la Porte des Ténèbres. Sœur Everlange, du clergé de la Sainte Lumière, a fait observer qu'une certaine « sœur Ostesylve », sorcière du sabbat Malecarde, tomba abattue au cimetière Tertrebois il y a quelques années.</p>
-        <p>Enfin, une rumeur sans fondement prête à une certaine Eliana Sandrenon une liaison avec un membre de la maison Malvoie.</p>
+        <p>À l'apogée de leur puissance, les Sandrenon étendaient leur influence locale par des membres introduits à la cour Malvoie, au sein de la magistrature urbaine, et jusqu'aux fonctions de trésorier et d'échevin. Ils auraient par le passé réduit à néant la maison Ostesylve, dont aucun vestige ne subsiste, trente-deux ans avant l'ouverture de la Porte des Ténèbres.</p>
+        <p>Sœur Everlange, du clergé de la Sainte Lumière, a fait observer qu'une certaine « sœur Ostesylve », sorcière du sabbat Malecarde, tomba abattue au cimetière Tertrebois il y a quelques années.</p>
+        <p>Enfin, une rumeur sans fondement prête à une dénommée Eliana Sandrenon une liaison avec un membre de la maison Malvoie.</p>
       </div>
     </div>
     <button class="lightbox-flip" id="lightboxFlip">Retourner ⤺</button>
@@ -540,6 +568,7 @@
   const lightboxImg  = document.getElementById('lightboxImg');
   const lightboxCard = document.getElementById('lightboxCard');
   const lightboxFlip = document.getElementById('lightboxFlip');
+  const lightboxBackBtn = document.getElementById('lightboxBackBtn');
 
   function openLightbox(src, alt) {
     lightboxImg.src = src;
@@ -567,6 +596,12 @@
       : 'Retourner ⤺';
   });
 
+  // Bouton retour → ferme la lightbox sans fermer le popup
+  lightboxBackBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    closeLightbox();
+  });
+
   // Empêcher la fermeture quand on clique dans la carte (image, texte, bouton)
   lightboxCard.addEventListener('click', e => {
     e.stopPropagation();
@@ -581,8 +616,11 @@
   });
 
   // Fermer la lightbox : clic sur le fond, sur la croix, ou touche Escape
+  // ATTENTION : stopPropagation pour éviter que le clic remonte au document
+  // (sinon le popup serait fermé par le listener global)
   lightbox.addEventListener('click', e => {
     if (e.target === lightbox || e.target.classList.contains('lightbox-close')) {
+      e.stopPropagation();
       closeLightbox();
     }
   });
