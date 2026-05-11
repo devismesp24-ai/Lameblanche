@@ -183,6 +183,10 @@
       border-top: none;
       border-bottom: 10px solid #6b4c2a;
     }
+    .popup.arrow-left::after,
+    .popup.arrow-right::after {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -266,55 +270,49 @@
   const img     = document.getElementById('mapImg');
 
   function positionPopup(hotspot, popup) {
-    const wRect  = wrapper.getBoundingClientRect();
-    const hRect  = hotspot.getBoundingClientRect();
-
-    const hLeft  = hRect.left - wRect.left + hRect.width / 2;
-    const hTop   = hRect.top  - wRect.top;
-    const hBot   = hRect.bottom - wRect.top;
-
-    // Mesure la hauteur réelle du popup
-    popup.style.visibility = 'hidden';
-    popup.style.display    = 'block';
+    const wRect = wrapper.getBoundingClientRect();
+    const hRect = hotspot.getBoundingClientRect();
+    const hLeft = hRect.left - wRect.left + hRect.width / 2;
+    const hTop  = hRect.top  - wRect.top;
+    const hBot  = hRect.bottom - wRect.top;
+    popup.style.visibility = "hidden";
+    popup.style.display    = "block";
     const popupH = popup.offsetHeight;
     const popupW = popup.offsetWidth;
-    popup.style.visibility = '';
-    popup.style.display    = '';
-
-    let top, left;
-
-    // Espace disponible dans la fenêtre
+    popup.style.visibility = "";
+    popup.style.display    = "";
     const spaceAbove = hRect.top - 8;
     const spaceBelow = window.innerHeight - hRect.bottom - 8;
-
-    // Vertical : préfère au-dessus si assez de place, sinon en dessous
-    if (spaceAbove >= popupH || spaceAbove >= spaceBelow) {
-      top = hTop - popupH - 12;
-      popup.classList.remove('arrow-top');
+    const spaceLeft  = hRect.left - wRect.left - 8;
+    let top, left;
+    popup.classList.remove("arrow-top", "arrow-left", "arrow-right");
+    if (spaceAbove >= popupH) {
+      top  = hTop - popupH - 12;
+      left = hLeft - 28;
+    } else if (spaceBelow >= popupH) {
+      top  = hBot + 12;
+      left = hLeft - 28;
+      popup.classList.add("arrow-top");
+    } else if (spaceLeft >= popupW) {
+      top  = hTop + hRect.height / 2 - popupH + 24;
+      left = hLeft - popupW - 16;
+      popup.classList.add("arrow-left");
     } else {
-      top = hBot + 12;
-      popup.classList.add('arrow-top');
+      top  = hTop + hRect.height / 2 - popupH + 24;
+      left = hLeft + 16;
+      popup.classList.add("arrow-right");
     }
-
-    // Correction débordement vertical dans la fenêtre
-    const absTop = wRect.top + top;
-    if (absTop + popupH > window.innerHeight - 8) {
-      top -= (absTop + popupH - window.innerHeight + 8);
-    }
-    if (wRect.top + top < 8) top = 8 - wRect.top;
-
-    // Horizontal : aligne sur le hotspot, puis corrige les débordements
-    left = hLeft - 28;
     if (left + popupW > wRect.width - 4) left = wRect.width - popupW - 4;
     if (left < 4) left = 4;
-
+    const absTop = wRect.top + top;
+    if (absTop + popupH > window.innerHeight - 8) top -= (absTop + popupH - window.innerHeight + 8);
+    if (wRect.top + top < 8) top = 8 - wRect.top;
     let arrowLeft = hLeft - left;
     if (arrowLeft < 12) arrowLeft = 12;
     if (arrowLeft > popupW - 12) arrowLeft = popupW - 12;
-    popup.style.setProperty('--arrow-left', arrowLeft + 'px');
-
-    popup.style.left = left + 'px';
-    popup.style.top  = top  + 'px';
+    popup.style.setProperty("--arrow-left", arrowLeft + "px");
+    popup.style.left = left + "px";
+    popup.style.top  = top  + "px";
   }
 
   // Clic sur un hotspot → ouvre/ferme le popup
