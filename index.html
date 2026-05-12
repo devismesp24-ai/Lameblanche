@@ -225,6 +225,7 @@
       max-height: calc(90vh - 4rem); /* laisse de la place au bouton */
       perspective: 1600px;
       cursor: default;
+      transition: height 0.7s cubic-bezier(0.4, 0.0, 0.2, 1);
     }
     .lightbox-inner {
       position: relative;
@@ -248,9 +249,12 @@
 
     /* Face avant : portrait */
     .lightbox-front {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
       padding: 1.2rem;
       text-align: center;
-      /* La face avant définit la taille de la card par défaut */
     }
     .lightbox-front img {
       max-width: 100%;
@@ -262,9 +266,6 @@
     }
 
     /* Face arrière : texte */
-    /* En position absolute et superposée à la face avant.
-       Quand la card est flipped, on bascule pour que CE soit le verso qui
-       définisse la hauteur (et l'avant qui se superpose, caché par backface). */
     .lightbox-back {
       position: absolute;
       top: 0;
@@ -277,19 +278,6 @@
       color: #3b2510;
       line-height: 1.65;
       text-align: left;
-    }
-
-    /* Quand la card est retournée, on inverse les rôles :
-       la face arrière devient celle qui définit la hauteur (flow normal),
-       la face avant passe en absolute. */
-    .lightbox-card.flipped .lightbox-front {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-    }
-    .lightbox-card.flipped .lightbox-back {
-      position: relative;
     }
     .lightbox-back h3 {
       font-family: 'Cinzel', serif;
@@ -615,6 +603,35 @@
   const lightboxes = document.querySelectorAll('.lightbox');
   let activeLightbox = null;
 
+  // Mesure la hauteur "naturelle" d'une face .lightbox-front ou .lightbox-back
+  function measureFaceHeight(face) {
+    // On retire temporairement le positionnement absolu pour mesurer la hauteur naturelle
+    const original = {
+      position: face.style.position,
+      visibility: face.style.visibility,
+      transform: face.style.transform
+    };
+    face.style.position = 'relative';
+    face.style.visibility = 'hidden';
+    face.style.transform = 'none';
+    const h = face.offsetHeight;
+    face.style.position = original.position;
+    face.style.visibility = original.visibility;
+    face.style.transform = original.transform;
+    return h;
+  }
+
+  // Ajuste la hauteur de la card selon la face affichée (avec animation)
+  function syncCardHeight(lb) {
+    const card  = lb.querySelector('.lightbox-card');
+    const front = lb.querySelector('.lightbox-front');
+    const back  = lb.querySelector('.lightbox-back');
+    const showingBack = card.classList.contains('flipped');
+    const targetFace = showingBack ? back : front;
+    const h = measureFaceHeight(targetFace);
+    card.style.height = h + 'px';
+  }
+
   function openLightbox(id) {
     const lb = document.getElementById(id);
     if (!lb) return;
@@ -624,6 +641,16 @@
     card.classList.remove('flipped'); // toujours rouvrir sur le recto
     flip.textContent = 'Retourner ⤺';
     lb.classList.add('active');
+    // Une fois la lightbox visible, on peut mesurer et fixer la hauteur
+    // Petit délai pour laisser le navigateur appliquer le display: flex
+    requestAnimationFrame(() => {
+      // Désactive la transition pour le réglage initial (pas d'anim à l'ouverture)
+      card.style.transition = 'none';
+      syncCardHeight(lb);
+      // Force un reflow puis réactive la transition
+      void card.offsetHeight;
+      card.style.transition = '';
+    });
   }
 
   function closeLightbox(lb) {
@@ -636,6 +663,7 @@
       const flip = lb.querySelector('.lightbox-flip');
       card.classList.remove('flipped');
       flip.textContent = 'Retourner ⤺';
+      card.style.height = ''; // reset hauteur
     }, 200);
   }
 
@@ -652,6 +680,7 @@
       flip.textContent = card.classList.contains('flipped')
         ? 'Retourner ⤻'
         : 'Retourner ⤺';
+      syncCardHeight(lb); // anime la hauteur en même temps que la rotation
     });
 
     // Bouton retour
@@ -677,8 +706,27 @@
     img.addEventListener('click', e => {
       e.stopPropagation();
       const target = img.dataset.lightbox;
-      if (target) openLightbox(target);
+      if (target) {
+        // Si l'image n'est pas encore chargée, attendre pour avoir une mesure correcte
+        const lb = document.getElementById(target);
+        const lbImg = lb && lb.querySelector('.lightbox-front img');
+        if (lbImg && !lbImg.complete) {
+          lbImg.addEventListener('load', () => openLightbox(target), { once: true });
+        }
+        openLightbox(target);
+      }
     });
+  });
+
+  // Recalcul si la fenêtre change de taille (responsive)
+  window.addEventListener('resize', () => {
+    if (activeLightbox) {
+      const card = activeLightbox.querySelector('.lightbox-card');
+      card.style.transition = 'none';
+      syncCardHeight(activeLightbox);
+      void card.offsetHeight;
+      card.style.transition = '';
+    }
   });
 
   // Escape → ferme la lightbox active
