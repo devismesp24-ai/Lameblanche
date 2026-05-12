@@ -403,7 +403,30 @@
     </div>
     <hr class="popup-divider" />
     <div class="popup-body">
-      <img src="leportrait.png" alt="Portrait" class="popup-portrait" style="width:130px; height:auto; display:block; margin:0 auto 10px auto; border:2px solid #6b4c2a; border-radius:2px; box-shadow:2px 2px 6px rgba(0,0,0,0.35); cursor:zoom-in;" />
+      <img src="leportrait.png" alt="Portrait" class="popup-portrait" data-lightbox="lightbox-aurore" style="width:130px; height:auto; display:block; margin:0 auto 10px auto; border:2px solid #6b4c2a; border-radius:2px; box-shadow:2px 2px 6px rgba(0,0,0,0.35); cursor:zoom-in;" />
+      Un campement abandonné occupe le fond de la grotte. Restes d'un feu, vivres avariées et vêtements dont l'appartenance reste indéterminée. Victimes du culte ? Bourreaux ? Voire les deux ? Le pendentif Sandrenon figure parmi ces affaires. Quatre cages au total : deux petites, destinées à des enfants ou des animaux, deux grandes pour des adultes. Sang humain séché à l'intérieur, récent. Outils sacrificiels à proximité. Tout indique que les sectateurs tués par le yéti à l'extérieur occupaient cette caverne et y pratiquaient des rituels.
+      <br><br>
+      Un monolithe drust entouré d'encens et de grigris le confirme, ainsi que deux ronces en pot, inexplicables à cette altitude et probablement issues de la forêt Cramoisie. L'herbier de Joshua Barnes, chasseur de sorcières au service de Griseroche, y consacre une note : cette variété, selon lui, fléchirait sous la magie drust, ou en porterait intrinsèquement la charge. Un parchemin adjacent, dédié à une certaine "Roncécorche", ressemble à un manuel d'initiation à la magie drust et prolonge la question.
+    </div>
+  </div>
+
+  <!-- ══ HOTSPOT 5 : Grotte yéti adulte non explorée ══ -->
+  <div class="hotspot hs-green" style="left: 22.44%; top: 16.12%;" data-popup="popup-yeti">
+    <div class="hotspot-ring" style="border-color: rgba(255,255,255,0.9); width: 22px; height: 22px;">
+      <div class="hotspot-dot" style="background:#ffffff; box-shadow: 0 0 0 2px #3b2510; width: 10px; height: 10px;"></div>
+    </div>
+  </div>
+
+  <!-- ══ POPUP 5 ══ -->
+  <div class="popup" id="popup-yeti" style="width: 400px;">
+    <button class="popup-close" aria-label="Fermer">✕</button>
+    <div class="popup-header">
+      <div class="popup-dot" style="background:#a63b2e;"></div>
+      <div class="popup-title">Intérieur du glacier</div>
+    </div>
+    <hr class="popup-divider" />
+    <div class="popup-body">
+      <img src="yetiadulte.png" alt="Yéti adulte" class="popup-portrait" data-lightbox="lightbox-yeti" style="width:130px; height:auto; display:block; margin:0 auto 10px auto; border:2px solid #6b4c2a; border-radius:2px; box-shadow:2px 2px 6px rgba(0,0,0,0.35); cursor:zoom-in;" />
       Un campement abandonné occupe le fond de la grotte. Restes d'un feu, vivres avariées et vêtements dont l'appartenance reste indéterminée. Victimes du culte ? Bourreaux ? Voire les deux ? Le pendentif Sandrenon figure parmi ces affaires. Quatre cages au total : deux petites, destinées à des enfants ou des animaux, deux grandes pour des adultes. Sang humain séché à l'intérieur, récent. Outils sacrificiels à proximité. Tout indique que les sectateurs tués par le yéti à l'extérieur occupaient cette caverne et y pratiquaient des rituels.
       <br><br>
       Un monolithe drust entouré d'encens et de grigris le confirme, ainsi que deux ronces en pot, inexplicables à cette altitude et probablement issues de la forêt Cramoisie. L'herbier de Joshua Barnes, chasseur de sorcières au service de Griseroche, y consacre une note : cette variété, selon lui, fléchirait sous la magie drust, ou en porterait intrinsèquement la charge. Un parchemin adjacent, dédié à une certaine "Roncécorche", ressemble à un manuel d'initiation à la magie drust et prolonge la question.
@@ -435,7 +458,7 @@
   <div class="popup" id="popup-caverne" style="width: 370px;">
     <button class="popup-close" aria-label="Fermer">✕</button>
     <div class="popup-header">
-      <div class="popup-dot" style="background:#b49b6e;"></div>
+      <div class="popup-dot" style="background:#a63b2e;"></div>
       <div class="popup-title">Caverne explorée</div>
     </div>
     <hr class="popup-divider" />
@@ -481,14 +504,14 @@
 
 </div><!-- /map-wrapper -->
 
-<!-- ══ LIGHTBOX ══ -->
-<div class="lightbox" id="lightbox">
-  <button class="lightbox-back-btn" id="lightboxBackBtn" aria-label="Retour">⟵ Retour</button>
+<!-- ══ LIGHTBOX 1 : Aurore Sandrenon ══ -->
+<div class="lightbox" id="lightbox-aurore" data-lightbox-name="aurore">
+  <button class="lightbox-back-btn lightbox-back-trigger" aria-label="Retour">⟵ Retour</button>
   <button class="lightbox-close" aria-label="Fermer">✕</button>
-  <div class="lightbox-card" id="lightboxCard">
+  <div class="lightbox-card">
     <div class="lightbox-inner">
       <div class="lightbox-face lightbox-front">
-        <img src="" alt="" id="lightboxImg" />
+        <img src="leportrait.png" alt="Aurore Sandrenon" />
       </div>
       <div class="lightbox-face lightbox-back">
         <h3>Aurore Sandrenon</h3>
@@ -500,7 +523,27 @@
         <p>Enfin, une rumeur sans fondement prête à une dénommée Eliana Sandrenon une liaison avec un membre de la maison Malvoie.</p>
       </div>
     </div>
-    <button class="lightbox-flip" id="lightboxFlip">Retourner ⤺</button>
+    <button class="lightbox-flip">Retourner ⤺</button>
+  </div>
+</div>
+
+<!-- ══ LIGHTBOX 2 : Yéti adulte ══ -->
+<div class="lightbox" id="lightbox-yeti" data-lightbox-name="yeti">
+  <button class="lightbox-back-btn lightbox-back-trigger" aria-label="Retour">⟵ Retour</button>
+  <button class="lightbox-close" aria-label="Fermer">✕</button>
+  <div class="lightbox-card">
+    <div class="lightbox-inner">
+      <div class="lightbox-face lightbox-front">
+        <img src="yetiadulte.png" alt="Yéti adulte" />
+      </div>
+      <div class="lightbox-face lightbox-back">
+        <h3>Yéti adulte</h3>
+        <hr />
+        <p>Un campement abandonné occupe le fond de la grotte. Restes d'un feu, vivres avariées et vêtements dont l'appartenance reste indéterminée. Victimes du culte ? Bourreaux ? Voire les deux ? Le pendentif Sandrenon figure parmi ces affaires. Quatre cages au total : deux petites, destinées à des enfants ou des animaux, deux grandes pour des adultes. Sang humain séché à l'intérieur, récent. Outils sacrificiels à proximité. Tout indique que les sectateurs tués par le yéti à l'extérieur occupaient cette caverne et y pratiquaient des rituels.</p>
+        <p>Un monolithe drust entouré d'encens et de grigris le confirme, ainsi que deux ronces en pot, inexplicables à cette altitude et probablement issues de la forêt Cramoisie. L'herbier de Joshua Barnes, chasseur de sorcières au service de Griseroche, y consacre une note : cette variété, selon lui, fléchirait sous la magie drust, ou en porterait intrinsèquement la charge. Un parchemin adjacent, dédié à une certaine "Roncécorche", ressemble à un manuel d'initiation à la magie drust et prolonge la question.</p>
+      </div>
+    </div>
+    <button class="lightbox-flip">Retourner ⤺</button>
   </div>
 </div>
 
@@ -563,70 +606,80 @@
     popup.style.top  = top  + "px";
   }
 
-  // ── Lightbox ──
-  const lightbox     = document.getElementById('lightbox');
-  const lightboxImg  = document.getElementById('lightboxImg');
-  const lightboxCard = document.getElementById('lightboxCard');
-  const lightboxFlip = document.getElementById('lightboxFlip');
-  const lightboxBackBtn = document.getElementById('lightboxBackBtn');
+  // ── Lightbox (multi) ──
+  const lightboxes = document.querySelectorAll('.lightbox');
+  let activeLightbox = null;
 
-  function openLightbox(src, alt) {
-    lightboxImg.src = src;
-    lightboxImg.alt = alt || '';
-    lightboxCard.classList.remove('flipped'); // toujours rouvrir sur le portrait
-    lightboxFlip.textContent = 'Retourner ⤺';
-    lightbox.classList.add('active');
+  function openLightbox(id) {
+    const lb = document.getElementById(id);
+    if (!lb) return;
+    activeLightbox = lb;
+    const card = lb.querySelector('.lightbox-card');
+    const flip = lb.querySelector('.lightbox-flip');
+    card.classList.remove('flipped'); // toujours rouvrir sur le recto
+    flip.textContent = 'Retourner ⤺';
+    lb.classList.add('active');
   }
-  function closeLightbox() {
-    lightbox.classList.remove('active');
-    // Petit délai pour ne pas voir le retour à la face avant pendant la fermeture
+
+  function closeLightbox(lb) {
+    if (!lb) return;
+    lb.classList.remove('active');
+    activeLightbox = null;
+    // Reset au recto après l'animation de fermeture
     setTimeout(() => {
-      lightboxCard.classList.remove('flipped');
-      lightboxFlip.textContent = 'Retourner ⤺';
-      lightboxImg.src = '';
+      const card = lb.querySelector('.lightbox-card');
+      const flip = lb.querySelector('.lightbox-flip');
+      card.classList.remove('flipped');
+      flip.textContent = 'Retourner ⤺';
     }, 200);
   }
 
-  // Bouton de flip
-  lightboxFlip.addEventListener('click', e => {
-    e.stopPropagation();
-    lightboxCard.classList.toggle('flipped');
-    lightboxFlip.textContent = lightboxCard.classList.contains('flipped')
-      ? 'Retourner ⤻'
-      : 'Retourner ⤺';
-  });
+  // Pour chaque lightbox, on attache ses propres listeners
+  lightboxes.forEach(lb => {
+    const card = lb.querySelector('.lightbox-card');
+    const flip = lb.querySelector('.lightbox-flip');
+    const backBtn = lb.querySelector('.lightbox-back-trigger');
 
-  // Bouton retour → ferme la lightbox sans fermer le popup
-  lightboxBackBtn.addEventListener('click', e => {
-    e.stopPropagation();
-    closeLightbox();
-  });
-
-  // Empêcher la fermeture quand on clique dans la carte (image, texte, bouton)
-  lightboxCard.addEventListener('click', e => {
-    e.stopPropagation();
-  });
-
-  // Clic sur un portrait dans un popup → ouvre la lightbox
-  wrapper.querySelectorAll('.popup-portrait').forEach(img => {
-    img.addEventListener('click', e => {
+    // Bouton flip
+    flip.addEventListener('click', e => {
       e.stopPropagation();
-      openLightbox(img.src, img.alt);
+      card.classList.toggle('flipped');
+      flip.textContent = card.classList.contains('flipped')
+        ? 'Retourner ⤻'
+        : 'Retourner ⤺';
+    });
+
+    // Bouton retour
+    backBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      closeLightbox(lb);
+    });
+
+    // Empêcher la fermeture quand on clique dans la carte
+    card.addEventListener('click', e => e.stopPropagation());
+
+    // Clic sur le fond noir ou la croix → ferme
+    lb.addEventListener('click', e => {
+      if (e.target === lb || e.target.classList.contains('lightbox-close')) {
+        e.stopPropagation();
+        closeLightbox(lb);
+      }
     });
   });
 
-  // Fermer la lightbox : clic sur le fond, sur la croix, ou touche Escape
-  // ATTENTION : stopPropagation pour éviter que le clic remonte au document
-  // (sinon le popup serait fermé par le listener global)
-  lightbox.addEventListener('click', e => {
-    if (e.target === lightbox || e.target.classList.contains('lightbox-close')) {
+  // Clic sur un portrait dans un popup → ouvre la bonne lightbox via data-lightbox
+  wrapper.querySelectorAll('.popup-portrait').forEach(img => {
+    img.addEventListener('click', e => {
       e.stopPropagation();
-      closeLightbox();
-    }
+      const target = img.dataset.lightbox;
+      if (target) openLightbox(target);
+    });
   });
+
+  // Escape → ferme la lightbox active
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && lightbox.classList.contains('active')) {
-      closeLightbox();
+    if (e.key === 'Escape' && activeLightbox) {
+      closeLightbox(activeLightbox);
     }
   });
 
