@@ -201,6 +201,254 @@
       margin-bottom: 4px;
       box-shadow: 2px 2px 6px rgba(0,0,0,0.35);
     }
+
+    /* ══════════════════════════════════════════════
+       Hotspot musique — note de croche
+       ══════════════════════════════════════════════ */
+    .music-hotspot {
+      position: absolute;
+      cursor: pointer;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* Halo / cercle pulsant derrière la note, dans le même esprit que les autres hotspots */
+    .music-hotspot::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid rgba(245, 240, 224, 0.55);
+      background: rgba(59, 37, 16, 0.18);
+      animation: musicHaloPulse 2.6s ease-in-out infinite;
+      transition: transform 0.2s ease;
+    }
+    .music-hotspot:hover::before {
+      transform: scale(1.12);
+      border-color: rgba(245, 240, 224, 0.9);
+    }
+    @keyframes musicHaloPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(245, 240, 224, 0.55); }
+      50%      { box-shadow: 0 0 0 8px rgba(245, 240, 224, 0); }
+    }
+    /* La note proprement dite (SVG) */
+    .music-hotspot svg {
+      position: relative;
+      width: 20px;
+      height: 20px;
+      filter: drop-shadow(1px 1px 0 #3b2510);
+      transition: transform 0.2s ease;
+      transform-origin: 50% 80%;
+    }
+    .music-hotspot:hover svg {
+      transform: scale(1.1);
+    }
+    /* Quand la musique joue : la note se balance doucement */
+    .music-hotspot.playing svg {
+      animation: noteSway 1.8s ease-in-out infinite;
+    }
+    .music-hotspot.playing::before {
+      border-color: rgba(212, 168, 83, 0.9);
+      background: rgba(212, 168, 83, 0.22);
+      animation-duration: 1.4s;
+    }
+    @keyframes noteSway {
+      0%, 100% { transform: rotate(-6deg); }
+      50%      { transform: rotate(6deg);  }
+    }
+
+    /* ══════════════════════════════════════════════
+       Lecteur audio (parchemin sous la carte)
+       ══════════════════════════════════════════════ */
+    .audio-player {
+      max-width: 900px;
+      width: 100%;
+      margin: 1rem auto 0;
+      background: #f5f0e0;
+      border: 2px solid #6b4c2a;
+      border-radius: 3px;
+      box-shadow: 4px 4px 0 #6b4c2a, 0 8px 24px rgba(0,0,0,0.5);
+      padding: 0 1.1rem;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(-6px);
+      transition: max-height 0.4s ease, opacity 0.3s ease,
+                  transform 0.4s ease, padding 0.4s ease, margin 0.4s ease;
+      box-sizing: border-box;
+    }
+    .audio-player.open {
+      max-height: 120px;
+      opacity: 1;
+      transform: translateY(0);
+      padding: 0.75rem 1.1rem;
+    }
+    .audio-player-inner {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: #3b2510;
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    /* Bouton lecture/pause */
+    .audio-play-btn {
+      flex-shrink: 0;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #f5f0e0;
+      border: 2px solid #6b4c2a;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #3b2510;
+      box-shadow: 2px 2px 0 #6b4c2a;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      padding: 0;
+    }
+    .audio-play-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 2px 3px 0 #6b4c2a;
+    }
+    .audio-play-btn:active {
+      transform: translateY(1px);
+      box-shadow: 2px 1px 0 #6b4c2a;
+    }
+    .audio-play-btn svg { width: 14px; height: 14px; }
+    .audio-play-btn .icon-pause { display: none; }
+    .audio-play-btn.playing .icon-play  { display: none; }
+    .audio-play-btn.playing .icon-pause { display: block; }
+
+    /* Titre + visualisation */
+    .audio-label {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      color: #3b2510;
+    }
+    /* Petites barres d'égaliseur décoratives */
+    .audio-bars {
+      display: inline-flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 14px;
+    }
+    .audio-bars span {
+      display: block;
+      width: 3px;
+      background: #8a6a45;
+      border-radius: 1px;
+      height: 30%;
+      transition: background 0.3s ease;
+    }
+    .audio-play-btn.playing ~ .audio-label .audio-bars span {
+      background: #6b4c2a;
+      animation: barsBounce 1s ease-in-out infinite;
+    }
+    .audio-play-btn.playing ~ .audio-label .audio-bars span:nth-child(1) { animation-delay: 0s;   }
+    .audio-play-btn.playing ~ .audio-label .audio-bars span:nth-child(2) { animation-delay: 0.2s; }
+    .audio-play-btn.playing ~ .audio-label .audio-bars span:nth-child(3) { animation-delay: 0.4s; }
+    .audio-play-btn.playing ~ .audio-label .audio-bars span:nth-child(4) { animation-delay: 0.15s; }
+    @keyframes barsBounce {
+      0%, 100% { height: 30%; }
+      50%      { height: 100%; }
+    }
+
+    /* Slider de volume */
+    .audio-volume {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+    .audio-volume svg {
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+      color: #6b4c2a;
+    }
+    .audio-volume input[type="range"] {
+      flex: 1;
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+      min-width: 60px;
+    }
+    /* Piste */
+    .audio-volume input[type="range"]::-webkit-slider-runnable-track {
+      height: 4px;
+      background: linear-gradient(to right, #6b4c2a 0%, #6b4c2a var(--vol, 35%), #c4a97a var(--vol, 35%), #c4a97a 100%);
+      border-radius: 2px;
+    }
+    .audio-volume input[type="range"]::-moz-range-track {
+      height: 4px;
+      background: #c4a97a;
+      border-radius: 2px;
+    }
+    .audio-volume input[type="range"]::-moz-range-progress {
+      height: 4px;
+      background: #6b4c2a;
+      border-radius: 2px;
+    }
+    /* Pouce */
+    .audio-volume input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #f5f0e0;
+      border: 2px solid #6b4c2a;
+      margin-top: -5px;
+      box-shadow: 1px 1px 0 #3b2510;
+      cursor: grab;
+    }
+    .audio-volume input[type="range"]::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #f5f0e0;
+      border: 2px solid #6b4c2a;
+      box-shadow: 1px 1px 0 #3b2510;
+      cursor: grab;
+    }
+    .audio-volume input[type="range"]:active::-webkit-slider-thumb { cursor: grabbing; }
+    .audio-volume input[type="range"]:active::-moz-range-thumb     { cursor: grabbing; }
+
+    /* Bouton fermer (range le lecteur) */
+    .audio-close {
+      flex-shrink: 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #8a6a45;
+      font-size: 16px;
+      padding: 4px 6px;
+      line-height: 1;
+      font-family: inherit;
+    }
+    .audio-close:hover { color: #3b2510; }
+
+    @media (max-width: 600px) {
+      .audio-player.open { max-height: 180px; }
+      .audio-player-inner {
+        flex-wrap: wrap;
+        gap: 0.6rem;
+      }
+      .audio-volume { width: 100%; order: 3; }
+    }
     /* ── Lightbox ── */
     .lightbox {
       position: fixed;
@@ -431,6 +679,28 @@
     </div>
   </div>
 
+  <!-- ══ HOTSPOT MUSIQUE : note de croche sur le rapace ══ -->
+  <div class="music-hotspot" id="musicHotspot" style="left: 82.11%; top: 21.89%;"
+       role="button" tabindex="0"
+       aria-label="Musique d'ambiance"
+       title="Musique d'ambiance">
+    <!-- Note de musique (croche) en doré -->
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="noteGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stop-color="#e8c878"/>
+          <stop offset="100%" stop-color="#a8762d"/>
+        </linearGradient>
+      </defs>
+      <!-- Hampe + drapeau -->
+      <path d="M 10 4 L 10 16 Q 13 14 16 12 Q 18 10.5 17 7 Q 16 4 13 5"
+            fill="url(#noteGrad)" stroke="#3b2510" stroke-width="1.2" stroke-linejoin="round"/>
+      <!-- Tête de la note (ellipse inclinée) -->
+      <ellipse cx="7" cy="17" rx="4" ry="3" transform="rotate(-20 7 17)"
+               fill="url(#noteGrad)" stroke="#3b2510" stroke-width="1.2"/>
+    </svg>
+  </div>
+
   <!-- ══ HOTSPOT 1 : Refuge abandonné (rond vert) ══ -->
   <div class="hotspot hs-green" style="left: 77.27%; top: 67.53%;" data-popup="popup-refuge">
     <div class="hotspot-ring" style="border-color: rgba(255,255,255,0.9);">
@@ -501,6 +771,39 @@
   </div>
 
 </div><!-- /map-wrapper -->
+
+<!-- ══ LECTEUR AUDIO (déplié au clic sur la note) ══ -->
+<div class="audio-player" id="audioPlayer">
+  <div class="audio-player-inner">
+    <button class="audio-play-btn" id="audioPlayBtn" aria-label="Lecture">
+      <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M6 4l14 8-14 8V4z"/>
+      </svg>
+      <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <rect x="6" y="4" width="4" height="16" rx="0.5"/>
+        <rect x="14" y="4" width="4" height="16" rx="0.5"/>
+      </svg>
+    </button>
+    <div class="audio-label">
+      <span class="audio-bars" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+      </span>
+      Ambiance
+    </div>
+    <div class="audio-volume">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor"/>
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+      </svg>
+      <input type="range" id="audioVolume" min="0" max="100" value="35"
+             aria-label="Volume" />
+    </div>
+    <button class="audio-close" id="audioClose" aria-label="Fermer le lecteur" title="Fermer">✕</button>
+  </div>
+</div>
+<audio id="ambientAudio" src="Musique.mp3" loop preload="auto"></audio>
 
 <!-- ══ LIGHTBOX 1 : Aurore Sandrenon ══ -->
 <div class="lightbox" id="lightbox-aurore" data-lightbox-name="aurore">
@@ -782,6 +1085,145 @@
       if (hotspot) positionPopup(hotspot, popup);
     });
   });
+
+  // ══════════════════════════════════════════════
+  // Musique d'ambiance — hotspot note + lecteur
+  // ══════════════════════════════════════════════
+  (function() {
+    const hotspot  = document.getElementById('musicHotspot');
+    const player   = document.getElementById('audioPlayer');
+    const playBtn  = document.getElementById('audioPlayBtn');
+    const volSlider= document.getElementById('audioVolume');
+    const closeBtn = document.getElementById('audioClose');
+    const audio    = document.getElementById('ambientAudio');
+
+    const STORAGE_VOL    = 'lameblanche.music.volume';
+    const STORAGE_OPEN   = 'lameblanche.music.open';
+    const STORAGE_PLAY   = 'lameblanche.music.playing';
+    const FADE_DURATION  = 900; // ms
+
+    // Restaurer le volume sauvegardé, sinon 35%
+    const savedVol = parseFloat(localStorage.getItem(STORAGE_VOL));
+    const initVol  = Number.isFinite(savedVol) ? savedVol : 0.35;
+    volSlider.value = Math.round(initVol * 100);
+    updateSliderFill();
+    audio.volume = 0; // démarre toujours à 0, on fade in à la lecture
+
+    function updateSliderFill() {
+      volSlider.style.setProperty('--vol', volSlider.value + '%');
+    }
+
+    let fadeTimer = null;
+    function fadeTo(targetVol, onDone) {
+      if (fadeTimer) clearInterval(fadeTimer);
+      const startVol = audio.volume;
+      const startTime = performance.now();
+      fadeTimer = setInterval(() => {
+        const t = Math.min(1, (performance.now() - startTime) / FADE_DURATION);
+        audio.volume = startVol + (targetVol - startVol) * t;
+        if (t >= 1) {
+          clearInterval(fadeTimer);
+          fadeTimer = null;
+          if (onDone) onDone();
+        }
+      }, 30);
+    }
+
+    function targetVolume() {
+      return parseInt(volSlider.value, 10) / 100;
+    }
+
+    function openPlayer() {
+      player.classList.add('open');
+      localStorage.setItem(STORAGE_OPEN, 'true');
+    }
+    function closePlayer() {
+      player.classList.remove('open');
+      localStorage.setItem(STORAGE_OPEN, 'false');
+    }
+
+    function play() {
+      audio.play().then(() => {
+        hotspot.classList.add('playing');
+        playBtn.classList.add('playing');
+        playBtn.setAttribute('aria-label', 'Pause');
+        fadeTo(targetVolume());
+        localStorage.setItem(STORAGE_PLAY, 'true');
+      }).catch(() => {
+        // Lecture refusée (rare après un vrai clic) : on reste discret
+      });
+    }
+
+    function pause() {
+      fadeTo(0, () => {
+        audio.pause();
+        hotspot.classList.remove('playing');
+        playBtn.classList.remove('playing');
+        playBtn.setAttribute('aria-label', 'Lecture');
+        localStorage.setItem(STORAGE_PLAY, 'false');
+      });
+    }
+
+    // ── Clic sur la note dans la carte ──
+    // Premier clic : ouvre le lecteur ET démarre la musique
+    // Clic suivant : bascule l'ouverture/fermeture du lecteur (sans toucher au son)
+    let firstClick = true;
+    hotspot.addEventListener('click', e => {
+      e.stopPropagation();
+      if (firstClick && audio.paused) {
+        firstClick = false;
+        openPlayer();
+        play();
+      } else {
+        // Toggle l'affichage du lecteur
+        if (player.classList.contains('open')) closePlayer();
+        else openPlayer();
+      }
+    });
+    // Accessibilité : touche Entrée / Espace sur le hotspot
+    hotspot.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        hotspot.click();
+      }
+    });
+
+    // ── Bouton lecture/pause du lecteur ──
+    playBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      if (audio.paused) play();
+      else pause();
+    });
+
+    // ── Slider de volume (ajuste en direct, sans fade) ──
+    volSlider.addEventListener('input', () => {
+      updateSliderFill();
+      const v = targetVolume();
+      localStorage.setItem(STORAGE_VOL, v);
+      // Si la musique joue : ajuste tout de suite (le fade en cours est annulé)
+      if (!audio.paused) {
+        if (fadeTimer) { clearInterval(fadeTimer); fadeTimer = null; }
+        audio.volume = v;
+      }
+    });
+
+    // ── Bouton fermer du lecteur ──
+    closeBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      closePlayer();
+    });
+
+    // ── Empêcher que les clics dans le lecteur ferment les popups ──
+    player.addEventListener('click', e => e.stopPropagation());
+
+    // ── Restauration de l'état au chargement ──
+    // Si le lecteur était ouvert : on le rouvre (sans démarrer la musique :
+    // les navigateurs imposent une interaction utilisateur)
+    if (localStorage.getItem(STORAGE_OPEN) === 'true') {
+      openPlayer();
+      firstClick = false; // évite de redémarrer la musique au prochain clic
+    }
+  })();
 </script>
 </body>
 </html>
