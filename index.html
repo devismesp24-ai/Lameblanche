@@ -212,8 +212,7 @@
     }
 
     /* ══════════════════════════════════════════════
-       Hotspot musique — note de croche en encre marron
-       (passe en doré au survol et pendant la lecture)
+       Hotspot musique — note de croche dorée, sans cercle
        ══════════════════════════════════════════════ */
     .music-hotspot {
       position: absolute;
@@ -225,24 +224,19 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      /* Pas de halo au repos : la note se fond comme une annotation à l'encre */
-      filter: none;
-      transition: transform 0.25s ease, filter 0.3s ease;
+      /* Petit halo doux pour aider la lecture sur la carte (pas un cercle visible) */
+      filter: drop-shadow(0 0 6px rgba(245, 240, 224, 0.55));
+      transition: transform 0.2s ease, filter 0.2s ease;
     }
     .music-hotspot:hover {
-      transform: translate(-50%, -50%) scale(1.18);
-      /* Halo doré au survol : signale l'interactivité */
-      filter: drop-shadow(0 0 7px rgba(232, 184, 92, 0.9));
-    }
-    .music-hotspot.playing {
-      /* Pendant la lecture : halo doré permanent, plus marqué */
-      filter: drop-shadow(0 0 8px rgba(232, 184, 92, 0.85));
+      transform: translate(-50%, -50%) scale(1.15);
+      filter: drop-shadow(0 0 10px rgba(245, 240, 224, 0.9));
     }
     .music-hotspot svg {
       width: 100%;
       height: 100%;
       transform-origin: 60% 80%;
-      transition: transform 0.25s ease;
+      transition: transform 0.2s ease;
     }
     /* Discret battement quand on ne joue PAS : juste pour attirer l'œil */
     .music-hotspot:not(.playing) svg {
@@ -259,35 +253,6 @@
     @keyframes noteSway {
       0%, 100% { transform: rotate(-10deg); }
       50%      { transform: rotate(8deg);   }
-    }
-
-    /* Couleurs de la note : marron par défaut, doré au survol/lecture */
-    .music-hotspot .note-fill {
-      fill: #6b4c2a;
-      transition: fill 0.3s ease;
-    }
-    .music-hotspot .note-stroke {
-      stroke: #3b2510;
-      transition: stroke 0.3s ease;
-    }
-    .music-hotspot .note-highlight {
-      fill: #8a6a45;
-      opacity: 0.5;
-      transition: fill 0.3s ease, opacity 0.3s ease;
-    }
-    .music-hotspot:hover .note-fill,
-    .music-hotspot.playing .note-fill {
-      fill: url(#noteGradGold);
-    }
-    .music-hotspot:hover .note-highlight,
-    .music-hotspot.playing .note-highlight {
-      fill: #f8e8b8;
-      opacity: 0.75;
-    }
-    /* La hampe (path sans fill) : on bascule sa couleur de trait en doré */
-    .music-hotspot:hover .note-stem,
-    .music-hotspot.playing .note-stem {
-      stroke: #c89345 !important;
     }
 
     /* ══════════════════════════════════════════════
@@ -710,11 +675,12 @@
     </div>
   </div>
 
-  <!-- ══ HOTSPOT MUSIQUE : croche encre marron, devient dorée au survol ══ -->
-  <div class="music-hotspot" id="musicHotspot" style="left: 82.11%; top: 21.89%;"
+  <!-- ══ HOTSPOT MUSIQUE : croche stylisée dorée ══ -->
+  <div class="music-hotspot" id="musicHotspot" style="left: 98.44%; top: 2.22%;"
        role="button" tabindex="0"
        aria-label="Musique d'ambiance"
        title="Musique d'ambiance">
+    <!-- Croche manuscrite : hampe courbe + drapeau ondulé + tête inclinée -->
     <svg viewBox="0 0 40 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
         <linearGradient id="noteGradGold" x1="0" y1="0" x2="0" y2="1">
@@ -727,29 +693,38 @@
       <path d="M 22 8
                C 22.5 16, 23 24, 23 32"
             fill="none"
-            class="note-stem"
-            stroke="#6b4c2a"
+            stroke="url(#noteGradGold)"
             stroke-width="3.2"
+            stroke-linecap="round"/>
+      <!-- Contour foncé de la hampe pour la lisibilité -->
+      <path d="M 22 8
+               C 22.5 16, 23 24, 23 32"
+            fill="none"
+            stroke="#3b2510"
+            stroke-width="1"
             stroke-linecap="round"
-            style="transition: stroke 0.3s ease;"/>
+            opacity="0.6"/>
       <!-- Drapeau ondulé / fanion qui flotte -->
       <path d="M 22 8
                Q 32 11, 33 18
                Q 33.5 22, 30 24
                Q 33 21, 30 17
                Q 26 13, 22 14 Z"
-            class="note-fill note-stroke"
+            fill="url(#noteGradGold)"
+            stroke="#3b2510"
             stroke-width="1.2"
             stroke-linejoin="round"/>
       <!-- Tête de note : ellipse inclinée, façon ronde dessinée -->
       <ellipse cx="16" cy="34" rx="7" ry="5"
                transform="rotate(-22 16 34)"
-               class="note-fill note-stroke"
+               fill="url(#noteGradGold)"
+               stroke="#3b2510"
                stroke-width="1.4"/>
-      <!-- Petit reflet sur la tête -->
+      <!-- Petit reflet sur la tête (effet manuscrit) -->
       <ellipse cx="14" cy="32" rx="2.2" ry="1"
                transform="rotate(-22 14 32)"
-               class="note-highlight"/>
+               fill="#f8e8b8"
+               opacity="0.7"/>
     </svg>
   </div>
 
