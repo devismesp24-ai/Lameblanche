@@ -222,7 +222,7 @@
     .lightbox-card {
       position: relative;
       width: min(420px, 90vw);
-      max-height: 90vh;
+      max-height: calc(90vh - 4rem); /* laisse de la place au bouton */
       perspective: 1600px;
       cursor: default;
     }
@@ -250,10 +250,11 @@
     .lightbox-front {
       padding: 1.2rem;
       text-align: center;
+      /* La face avant définit la taille de la card par défaut */
     }
     .lightbox-front img {
       max-width: 100%;
-      max-height: calc(90vh - 4rem);
+      max-height: calc(90vh - 8rem);
       width: auto;
       height: auto;
       display: block;
@@ -261,20 +262,34 @@
     }
 
     /* Face arrière : texte */
+    /* En position absolute et superposée à la face avant.
+       Quand la card est flipped, on bascule pour que CE soit le verso qui
+       définisse la hauteur (et l'avant qui se superpose, caché par backface). */
     .lightbox-back {
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
-      bottom: 0;
       transform: rotateY(180deg);
-      padding: 1.6rem 1.4rem 1.2rem;
-      overflow-y: auto;
+      padding: 1.6rem 1.4rem 1.4rem;
       font-family: 'Georgia', serif;
       font-size: 13px;
       color: #3b2510;
       line-height: 1.65;
       text-align: left;
+    }
+
+    /* Quand la card est retournée, on inverse les rôles :
+       la face arrière devient celle qui définit la hauteur (flow normal),
+       la face avant passe en absolute. */
+    .lightbox-card.flipped .lightbox-front {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+    }
+    .lightbox-card.flipped .lightbox-back {
+      position: relative;
     }
     .lightbox-back h3 {
       font-family: 'Cinzel', serif;
@@ -295,18 +310,6 @@
     }
     .lightbox-back p:last-child {
       margin-bottom: 0;
-    }
-
-    /* Scrollbar discrète sur le verso */
-    .lightbox-back::-webkit-scrollbar {
-      width: 8px;
-    }
-    .lightbox-back::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    .lightbox-back::-webkit-scrollbar-thumb {
-      background: #c4a97a;
-      border-radius: 4px;
     }
 
     /* Bouton flip */
