@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lame Blanche — Carte Interactive</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=IM+Fell+English:ital@0;1&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=IM+Fell+English:ital@0;1&family=Tangerine:wght@700&display=swap');
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -40,7 +40,6 @@
       width: 100%;
       height: auto;
       border: 3px solid #6b4c2a;
-      border-top: none;
       box-shadow: 0 0 0 1px #3b2510, 6px 6px 24px rgba(0,0,0,0.7);
     }
 
@@ -52,29 +51,30 @@
       z-index: 10;
     }
 
-    /* ── Titre de la carte (en-tête au-dessus de la carte, dans le cadre) ── */
+    /* ── Titre de la carte (annotation manuscrite du cartographe) ── */
     .map-title {
-      width: 100%;
-      max-width: 900px;
-      background: #1a1208;
-      border: 3px solid #6b4c2a;
-      border-bottom: none;
-      box-shadow: 0 0 0 1px #3b2510;
-      padding: 14px 24px 12px;
-      text-align: center;
+      position: absolute;
+      top: 1%;
+      left: 50%;
+      transform: translateX(-50%) rotate(-1.5deg);
+      transform-origin: center;
       cursor: pointer;
-      font-family: 'Cinzel', serif;
-      font-size: clamp(12px, 1.4vw, 16px);
-      font-weight: 400;
-      letter-spacing: 0.42em;
-      text-transform: uppercase;
-      color: #c4a97a;
-      transition: color 0.25s ease, letter-spacing 0.25s ease;
+      z-index: 10;
+      font-family: 'Tangerine', cursive;
+      font-weight: 700;
+      font-size: clamp(30px, 4vw, 50px);
+      line-height: 1;
+      color: #3b2510;
+      letter-spacing: 0.01em;
+      padding: 6px 18px;
+      white-space: nowrap;
+      transition: transform 0.3s ease, color 0.25s ease;
+      text-shadow: 0 1px 0 rgba(245, 240, 224, 0.4);
       user-select: none;
     }
     .map-title:hover {
-      color: #f5e9c8;
-      letter-spacing: 0.48em;
+      color: #a63b2e; /* même rouge que les annotations existantes */
+      transform: translateX(-50%) rotate(-1.5deg) scale(1.03);
     }
 
     .hotspot-ring {
@@ -722,11 +722,11 @@
 
 <div class="map-stage">
 
-<!-- ══ TITRE CLIQUABLE : Traverse de Lameblanche (en-tête de la carte) ══ -->
-<div class="map-title" data-popup="popup-traverse">Traverse de Lameblanche</div>
-
 <div class="map-wrapper" id="mapWrapper">
   <img src="carte.jpg" alt="Carte de Lame Blanche" id="mapImg" />
+
+  <!-- ══ TITRE CLIQUABLE : Traverse de Lameblanche ══ -->
+  <div class="map-title" data-popup="popup-traverse">Traverse de Lameblanche</div>
 
   <!-- ══ POPUP TITRE ══ -->
   <div class="popup" id="popup-traverse" style="width: 430px;">
@@ -1290,12 +1290,7 @@
   });
 
   // Clic sur un hotspot ou le titre cliquable → ouvre/ferme le popup
-  // (.map-title est désormais hors de #mapWrapper, on le requête depuis le document)
-  const clickables = [
-    ...wrapper.querySelectorAll('.hotspot'),
-    ...document.querySelectorAll('.map-title')
-  ];
-  clickables.forEach(hotspot => {
+  wrapper.querySelectorAll('.hotspot, .map-title').forEach(hotspot => {
     hotspot.addEventListener('click', e => {
       e.stopPropagation();
       const targetId = hotspot.dataset.popup;
@@ -1330,8 +1325,7 @@
   window.addEventListener('resize', () => {
     wrapper.querySelectorAll('.popup.active').forEach(popup => {
       const id      = popup.id;
-      const hotspot = wrapper.querySelector(`[data-popup="${id}"]`)
-                   || document.querySelector(`[data-popup="${id}"]`);
+      const hotspot = wrapper.querySelector(`[data-popup="${id}"]`);
       if (hotspot) positionPopup(hotspot, popup);
     });
   });
