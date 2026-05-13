@@ -40,6 +40,7 @@
       width: 100%;
       height: auto;
       border: 3px solid #6b4c2a;
+      border-top: none;
       box-shadow: 0 0 0 1px #3b2510, 6px 6px 24px rgba(0,0,0,0.7);
     }
 
@@ -51,28 +52,29 @@
       z-index: 10;
     }
 
-    /* ── Titre de la carte (hotspot stylisé en titre) ── */
+    /* ── Titre de la carte (en-tête au-dessus de la carte, dans le cadre) ── */
     .map-title {
-      position: absolute;
-      top: 1.2%;
-      left: 50%;
-      transform: translateX(-50%);
+      width: 100%;
+      max-width: 900px;
+      background: #1a1208;
+      border: 3px solid #6b4c2a;
+      border-bottom: none;
+      box-shadow: 0 0 0 1px #3b2510;
+      padding: 14px 24px 12px;
+      text-align: center;
       cursor: pointer;
-      z-index: 10;
       font-family: 'Cinzel', serif;
-      font-size: clamp(13px, 1.6vw, 19px);
+      font-size: clamp(12px, 1.4vw, 16px);
       font-weight: 400;
-      letter-spacing: 0.32em;
+      letter-spacing: 0.42em;
       text-transform: uppercase;
-      color: #e8d9b0;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.7);
-      padding: 4px 14px 4px 18px; /* compense le letter-spacing à droite */
-      white-space: nowrap;
-      transition: color 0.2s ease, letter-spacing 0.2s ease;
+      color: #c4a97a;
+      transition: color 0.25s ease, letter-spacing 0.25s ease;
+      user-select: none;
     }
     .map-title:hover {
-      color: #ffffff;
-      letter-spacing: 0.36em;
+      color: #f5e9c8;
+      letter-spacing: 0.48em;
     }
 
     .hotspot-ring {
@@ -720,11 +722,11 @@
 
 <div class="map-stage">
 
+<!-- ══ TITRE CLIQUABLE : Traverse de Lameblanche (en-tête de la carte) ══ -->
+<div class="map-title" data-popup="popup-traverse">Traverse de Lameblanche</div>
+
 <div class="map-wrapper" id="mapWrapper">
   <img src="carte.jpg" alt="Carte de Lame Blanche" id="mapImg" />
-
-  <!-- ══ TITRE CLIQUABLE : Traverse de Lameblanche ══ -->
-  <div class="map-title" data-popup="popup-traverse">Traverse de Lameblanche</div>
 
   <!-- ══ POPUP TITRE ══ -->
   <div class="popup" id="popup-traverse" style="width: 430px;">
@@ -1288,7 +1290,12 @@
   });
 
   // Clic sur un hotspot ou le titre cliquable → ouvre/ferme le popup
-  wrapper.querySelectorAll('.hotspot, .map-title').forEach(hotspot => {
+  // (.map-title est désormais hors de #mapWrapper, on le requête depuis le document)
+  const clickables = [
+    ...wrapper.querySelectorAll('.hotspot'),
+    ...document.querySelectorAll('.map-title')
+  ];
+  clickables.forEach(hotspot => {
     hotspot.addEventListener('click', e => {
       e.stopPropagation();
       const targetId = hotspot.dataset.popup;
@@ -1323,7 +1330,8 @@
   window.addEventListener('resize', () => {
     wrapper.querySelectorAll('.popup.active').forEach(popup => {
       const id      = popup.id;
-      const hotspot = wrapper.querySelector(`[data-popup="${id}"]`);
+      const hotspot = wrapper.querySelector(`[data-popup="${id}"]`)
+                   || document.querySelector(`[data-popup="${id}"]`);
       if (hotspot) positionPopup(hotspot, popup);
     });
   });
