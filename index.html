@@ -54,41 +54,25 @@
     /* ── Titre de la carte (hotspot stylisé en titre) ── */
     .map-title {
       position: absolute;
-      top: 2.5%;
+      top: 1.2%;
       left: 50%;
       transform: translateX(-50%);
       cursor: pointer;
       z-index: 10;
       font-family: 'Cinzel', serif;
-      font-size: clamp(18px, 2.6vw, 30px);
-      font-weight: 700;
-      letter-spacing: 0.12em;
+      font-size: clamp(13px, 1.6vw, 19px);
+      font-weight: 400;
+      letter-spacing: 0.32em;
       text-transform: uppercase;
-      color: #f5e9c8;
-      text-shadow:
-        0 0 6px rgba(0,0,0,0.95),
-        2px 2px 0 #1a1208,
-        -1px -1px 0 #1a1208,
-        1px -1px 0 #1a1208,
-        -1px 1px 0 #1a1208;
-      padding: 6px 22px;
+      color: #e8d9b0;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.7);
+      padding: 4px 14px 4px 18px; /* compense le letter-spacing à droite */
       white-space: nowrap;
-      transition: color 0.2s ease, transform 0.2s ease;
+      transition: color 0.2s ease, letter-spacing 0.2s ease;
     }
-    .map-title::before,
-    .map-title::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      width: 28px;
-      height: 1.5px;
-      background: linear-gradient(to right, transparent, #c4a97a, transparent);
-    }
-    .map-title::before { right: 100%; }
-    .map-title::after  { left: 100%; }
     .map-title:hover {
       color: #ffffff;
-      transform: translateX(-50%) translateY(-1px);
+      letter-spacing: 0.36em;
     }
 
     .hotspot-ring {
