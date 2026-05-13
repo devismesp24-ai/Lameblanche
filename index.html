@@ -198,6 +198,76 @@
     }
 
     /* ── Vignette image dans popup ── */
+    /* ══════════════════════════════════════════════
+       Portrait cliquable dans un popup
+       Wrapper qui héberge le coin replié (page cornée)
+       ══════════════════════════════════════════════ */
+    .portrait-wrapper {
+      position: relative;
+      display: block;
+      width: 130px;
+      margin: 0 auto 10px auto;
+      cursor: pointer;
+      /* Léger soulèvement au survol */
+      transition: transform 0.25s ease, filter 0.25s ease;
+    }
+    .portrait-wrapper:hover {
+      transform: translateY(-2px);
+      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.35));
+    }
+    .portrait-wrapper img.popup-portrait {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 2px solid #6b4c2a;
+      border-radius: 2px;
+      box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.35);
+      transition: box-shadow 0.25s ease;
+    }
+    .portrait-wrapper:hover img.popup-portrait {
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, 0); /* l'ombre passe sur le wrapper */
+    }
+
+    /* Coin replié (page cornée) en haut à droite */
+    .portrait-wrapper::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 14px;
+      height: 14px;
+      /* Triangle replié : haut-droit retiré, suggère une page tournée */
+      background: linear-gradient(225deg,
+                  #d4b483 0%,
+                  #d4b483 48%,
+                  #6b4c2a 49%,
+                  #6b4c2a 52%,
+                  #f5f0e0 53%,
+                  #e8dcc0 100%);
+      box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.25);
+      transition: width 0.25s ease, height 0.25s ease,
+                  top 0.25s ease, right 0.25s ease;
+      pointer-events: none;
+    }
+    .portrait-wrapper:hover::after {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Discret battement de survol-attention toutes les ~6s pour signaler la cliquabilité */
+    @keyframes cornerPeek {
+      0%, 92%, 100% { transform: scale(1); }
+      94%           { transform: scale(1.18); }
+      96%           { transform: scale(1); }
+    }
+    .portrait-wrapper::after {
+      transform-origin: top right;
+      animation: cornerPeek 6s ease-in-out infinite;
+    }
+    .portrait-wrapper:hover::after {
+      animation: none; /* on coupe le micro-battement au survol */
+    }
+
     .popup-thumb {
       width: 90px;
       height: 113px;
@@ -645,7 +715,9 @@
     </div>
     <hr class="popup-divider" />
     <div class="popup-body">
-      <img src="leportrait.png" alt="Portrait" class="popup-portrait" data-lightbox="lightbox-aurore" style="width:130px; height:auto; display:block; margin:0 auto 10px auto; border:2px solid #6b4c2a; border-radius:2px; box-shadow:2px 2px 6px rgba(0,0,0,0.35); cursor:zoom-in;" />
+      <span class="portrait-wrapper" data-lightbox="lightbox-aurore">
+        <img src="leportrait.png" alt="Portrait" class="popup-portrait" />
+      </span>
       Un campement abandonné occupe le fond de la grotte. Restes d'un feu, vivres avariées et vêtements dont l'appartenance reste indéterminée. Victimes du culte ? Bourreaux ? Voire les deux ? Le pendentif Sandrenon figure parmi ces affaires. Quatre cages au total : deux petites, destinées à des enfants ou des animaux, deux grandes pour des adultes. Sang humain séché à l'intérieur, récent. Outils sacrificiels à proximité. Tout indique que les sectateurs tués par le yéti à l'extérieur occupaient cette caverne et y pratiquaient des rituels.
       <br><br>
       Un monolithe drust entouré d'encens et de grigris le confirme, ainsi que deux ronces en pot, inexplicables à cette altitude et probablement issues de la forêt Cramoisie. L'herbier de Joshua Barnes, chasseur de sorcières au service de Griseroche, y consacre une note : cette variété, selon lui, fléchirait sous la magie drust, ou en porterait intrinsèquement la charge. Un parchemin adjacent, dédié à une certaine "Roncécorche", ressemble à un manuel d'initiation à la magie drust et prolonge la question.
@@ -668,7 +740,9 @@
     </div>
     <hr class="popup-divider" />
     <div class="popup-body">
-      <img src="yetiadulte.png" alt="Yéti adulte" class="popup-portrait" data-lightbox="lightbox-yeti" style="width:130px; height:auto; display:block; margin:0 auto 10px auto; border:2px solid #6b4c2a; border-radius:2px; box-shadow:2px 2px 6px rgba(0,0,0,0.35); cursor:zoom-in;" />
+      <span class="portrait-wrapper" data-lightbox="lightbox-yeti">
+        <img src="yetiadulte.png" alt="Yéti adulte" class="popup-portrait" />
+      </span>
       Le glacier s'ouvre sur une cavité inexplorée, trop périlleuse pour qu'on s'y engage seul, car il apparaît que le yéti adulte y entrepose ses proies. La glace lui tient probablement lieu de chambre-froide pour les préserver&nbsp;? L'hypothèse, si elle se vérifie, trahirait chez la bête une prévoyance remarquable, bien que cela n'épuise sans doute pas le mystère du lieu.
       <br><br>
       Le glacier de Gol Koval, plus en aval, dissimule des ruines drust en son cœur. Les anciens occupants y cherchaient-ils refuge, ou cherchaient-ils à soustraire quelque chose au regard des hommes&nbsp;? Cette interrogation explique vraisemblablement la tentative des cultistes de Roncécorche, qui voulurent forcer celui-ci et succombèrent sous les coups du yéti. Lequel dédaigna leurs corps, signe que sa férocité ne relevait pas de la faim, mais bien de la protection de son territoire.
@@ -1042,10 +1116,11 @@
   });
 
   // Clic sur un portrait dans un popup → ouvre la bonne lightbox via data-lightbox
-  wrapper.querySelectorAll('.popup-portrait').forEach(img => {
-    img.addEventListener('click', e => {
+  // (le wrapper porte data-lightbox, le clic peut venir de l'image ou du coin replié)
+  wrapper.querySelectorAll('.portrait-wrapper').forEach(pw => {
+    pw.addEventListener('click', e => {
       e.stopPropagation();
-      const target = img.dataset.lightbox;
+      const target = pw.dataset.lightbox;
       if (target) {
         // Si l'image n'est pas encore chargée, attendre pour avoir une mesure correcte
         const lb = document.getElementById(target);
