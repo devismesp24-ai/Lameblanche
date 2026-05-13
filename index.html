@@ -51,6 +51,46 @@
       z-index: 10;
     }
 
+    /* ── Titre de la carte (hotspot stylisé en titre) ── */
+    .map-title {
+      position: absolute;
+      top: 2.5%;
+      left: 50%;
+      transform: translateX(-50%);
+      cursor: pointer;
+      z-index: 10;
+      font-family: 'Cinzel', serif;
+      font-size: clamp(18px, 2.6vw, 30px);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #f5e9c8;
+      text-shadow:
+        0 0 6px rgba(0,0,0,0.95),
+        2px 2px 0 #1a1208,
+        -1px -1px 0 #1a1208,
+        1px -1px 0 #1a1208,
+        -1px 1px 0 #1a1208;
+      padding: 6px 22px;
+      white-space: nowrap;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+    .map-title::before,
+    .map-title::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 28px;
+      height: 1.5px;
+      background: linear-gradient(to right, transparent, #c4a97a, transparent);
+    }
+    .map-title::before { right: 100%; }
+    .map-title::after  { left: 100%; }
+    .map-title:hover {
+      color: #ffffff;
+      transform: translateX(-50%) translateY(-1px);
+    }
+
     .hotspot-ring {
       width: 32px;
       height: 32px;
@@ -699,6 +739,24 @@
 <div class="map-wrapper" id="mapWrapper">
   <img src="carte.jpg" alt="Carte de Lame Blanche" id="mapImg" />
 
+  <!-- ══ TITRE CLIQUABLE : Traverse de Lameblanche ══ -->
+  <div class="map-title" data-popup="popup-traverse">Traverse de Lameblanche</div>
+
+  <!-- ══ POPUP TITRE ══ -->
+  <div class="popup" id="popup-traverse" style="width: 430px;">
+    <button class="popup-close" aria-label="Fermer">✕</button>
+    <div class="popup-header">
+      <div class="popup-dot" style="background:#301908;"></div>
+      <div class="popup-title">Traverse de Lameblanche</div>
+    </div>
+    <hr class="popup-divider" />
+    <div class="popup-body">
+      L'épaulement glaciaire se partage entre deux masses : un petit glacier enserré entre le refuge abandonné et le sentier menant à Gol Koval, et un second, plus imposant, qui enveloppe la caverne inexplorée du yéti. La fonte de ce dernier alimente un lac où affleure une petite île portant des ruines drust et trois stèles, dont l'une gît renversée ; les eaux s'en écoulent ensuite en cascade jusqu'aux pâtis d'Ormefange, au sud. Plusieurs cadavres, en majorité masculins, jonchent le secteur, accoutrés à la manière dont on se représente communément les géants qui peuplaient autrefois ces hauteurs : masques, bois de cerf, ossements et fourrures. Les blessures désignent un yéti adulte pour responsable du carnage, la traverse de Lameblanche paraissant constituer son territoire.
+      <br><br>
+      La découverte du site fit suite à l'observation d'une silhouette au sommet du glacier de Gol Koval : sans doute un sectaire de Roncécorche fuyant le massacre, ou cherchant une voie de descente avant de tomber, plus tard, sous les coups de la bête. La chronologie demeure incertaine. Les empreintes relevées rattachent toutefois le groupe à la trouée des Hauts-Laments, à l'est, plutôt qu'à Corvenac au sud ; encore que l'on ne saurait exclure que quelques rescapés en eussent effectué la descente.
+    </div>
+  </div>
+
   <!-- ══ HOTSPOT 4 : Grotte des cultistes ══ -->
   <div class="hotspot hs-green" style="left: 11.48%; top: 51.56%;" data-popup="popup-grotte">
     <div class="hotspot-ring" style="border-color: rgba(255,255,255,0.9); width: 22px; height: 22px;">
@@ -1245,8 +1303,8 @@
     }
   });
 
-  // Clic sur un hotspot → ouvre/ferme le popup
-  wrapper.querySelectorAll('.hotspot').forEach(hotspot => {
+  // Clic sur un hotspot ou le titre cliquable → ouvre/ferme le popup
+  wrapper.querySelectorAll('.hotspot, .map-title').forEach(hotspot => {
     hotspot.addEventListener('click', e => {
       e.stopPropagation();
       const targetId = hotspot.dataset.popup;
