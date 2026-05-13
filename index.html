@@ -997,6 +997,8 @@
     </div>
     <button class="lightbox-flip">Retourner ⤺</button>
   </div>
+  <!-- Easter egg : son chèvre 1/10 sur le bouton Retourner -->
+  <audio id="goatSound" src="chevre.mp3" preload="auto"></audio>
 </div>
 
 <script>
@@ -1374,6 +1376,25 @@
       openPlayer();
       firstClick = false; // évite de redémarrer la musique au prochain clic
     }
+  })();
+
+  // ══════════════════════════════════════════════
+  // Easter egg : 1 chance sur 10 de bêler en retournant la fiche Corven
+  // ══════════════════════════════════════════════
+  (function() {
+    const corvenLightbox = document.getElementById('lightbox-corvenac');
+    const goat = document.getElementById('goatSound');
+    if (!corvenLightbox || !goat) return;
+    const flipBtn = corvenLightbox.querySelector('.lightbox-flip');
+    if (!flipBtn) return;
+    flipBtn.addEventListener('click', () => {
+      if (Math.random() < 0.10) {
+        // Reset au début pour que ça marche même si l'easter egg vient de jouer
+        goat.currentTime = 0;
+        goat.volume = 0.7;
+        goat.play().catch(() => { /* ignoré silencieusement */ });
+      }
+    });
   })();
 </script>
 </body>
